@@ -1,0 +1,18 @@
+{
+  "name": "gen-pdf",
+  "version": "1.0.0",
+  "description": "generate pdf",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "waleedsamy634@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.16.1",
+    "express": "^4.14.1",
+    "exwml": "^2.0.4",
+    "html-pdf": "^2.1.0",
+    "prom-client": "^7.1.0"
+  }
+}

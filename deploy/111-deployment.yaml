@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: pdfgenerator
+ labels:
+  name: pdfgenerator
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: pdfgenerator
+      labels:
+        tier: backend
+        lang: javascript
+        name: pdfgenerator
+    spec:
+      containers:
+        - name: pdfgenerator
+          image: waleedsamy/gen-pdf
+          imagePullPolicy: Always
+          env:
+            - name: DOCKER_HOST_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          ports:
+          - name: web
+            containerPort: 3000
