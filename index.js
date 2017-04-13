@@ -4,17 +4,18 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     exwml = require('exwml'),
     options = {
-        "format": "A4",
-        "orientation": "portrait",
-        "border": {
-            "top": "4mm",
-            "right": "4mm",
-            "bottom": "4mm",
-            "left": "4mm"
+        'format': 'A4',
+        'orientation': 'portrait',
+        'border': {
+            'top': '4mm',
+            'right': '4mm',
+            'bottom': '4mm',
+            'left': '4mm'
         }
     },
     app = express(),
     urlencodedParser = bodyParser.urlencoded({
+        limit: '50mb',
         extended: false
     });
 

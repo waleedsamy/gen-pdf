@@ -13,6 +13,7 @@
   $ docker pull waleedsamy/gen-pdf
   $ docker run -d -e LOG_FORMAT=pretty -p 3000:3000 waleedsamy/gen-pdf
   $ curl -o tktpost.pdf -X POST -H "Content-Type: application/x-www-form-urlencoded" -d 'html=<div>content</div>' "http://localhost:3000/"
+  $ curl -o tktpost.pdf -X POST -H "Content-Type: application/x-www-form-urlencoded" -d @big.html "http://localhost:3000/"
   # prometheus metrics
   $ curl "http://localhost:3000/metrics"
   # http_requests_total{code="400",method="post"} 1
