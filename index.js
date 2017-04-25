@@ -3,44 +3,25 @@ var express = require('express'),
     pdf = require('html-pdf'),
     bodyParser = require('body-parser'),
     exwml = require('exwml'),
-    options = {
-        'format': 'A4',
-        'orientation': 'portrait',
-        'border': {
-            'top': '4mm',
-            'right': '4mm',
-            'bottom': '4mm',
-            'left': '4mm'
-        }
-    },
     app = express(),
+    insureHTML = require('./middleware').insureHTML,
+    insureConfig = require('./middleware').insureConfig,
+    promRegisterMetrics = require('./middleware').promRegisterMetrics,
+    logErrors = require('./middleware').logErrors,
+    promUpdateErrorMetrics = require('./middleware').promUpdateErrorMetrics,
+    errorHandler = require('./middleware').errorHandler,
+    metrics = require('./metrics'),
     urlencodedParser = bodyParser.urlencoded({
         limit: '50mb',
         extended: false
     });
 
-const HTTP_REQUESTS_TOTAL = 'http_requests_total';
-
-var httpRequestsTotal = new prom.Counter(HTTP_REQUESTS_TOTAL, 'count of http requests', ['code','method']);
-
-app.post('/', urlencodedParser, function(req, res) {
-    if (!req.body || !req.body.html) {
-        httpRequestsTotal.inc({
-            code: 400,
-            method: 'post'
-        });
-        return res.sendStatus(400);
-    }
-    pdf.create(req.body.html, options).toStream(function(err, stream) {
+app.post('/', urlencodedParser, insureHTML, insureConfig, function(req, res, next) {
+    pdf.create(req.body.html, req.body.config).toStream(function(err, stream) {
         if (err || !stream) {
-            logger.error(err.message, err);
-            httpRequestsTotal.inc({
-                code: 500,
-                method: 'post'
-            });
-            return res.sendStatus(500);
+            return next(err);
         }
-        httpRequestsTotal.inc({
+        metrics.httpRequestsTotal.inc({
             code: 200,
             method: 'post'
         });
@@ -48,9 +29,11 @@ app.post('/', urlencodedParser, function(req, res) {
     });
 });
 
-app.get('/metrics', function(req, res) {
-    res.end(prom.register.metrics());
-});
+app.get('/metrics', promRegisterMetrics);
+
+app.use(logErrors);
+app.use(promUpdateErrorMetrics);
+app.use(errorHandler);
 
 app.listen(3000, function() {
     logger.alert('Service starting', {

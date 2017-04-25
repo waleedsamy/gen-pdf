@@ -4,15 +4,26 @@
   "description": "generate pdf",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "mocha"
   },
   "author": "waleedsamy634@gmail.com",
-  "license": "ISC",
+  "license": "MIT",
+  "repository" :{
+    "type" : "git",
+    "url" : "https://github.com/waleedsamy/gen-pdf.git"
+  },
   "dependencies": {
     "body-parser": "^1.16.1",
     "express": "^4.14.1",
     "exwml": "^2.0.4",
     "html-pdf": "^2.1.0",
+    "lodash": "^4.17.4",
     "prom-client": "^7.1.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.3.0",
+    "node-mocks-http": "^1.6.1",
+    "should": "^11.2.1"
   }
 }

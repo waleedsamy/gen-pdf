@@ -64,4 +64,5 @@ typings/
 
 # End of https://www.gitignore.io/api/node
 *.pdf
+*.html
 .DS_Store
